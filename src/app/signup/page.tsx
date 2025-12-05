@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase'
 
-export default function SignUp() {
+export default function SignUpPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -13,15 +13,11 @@ export default function SignUp() {
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        emailRedirectTo: `${location.origin}/dashboard`,
-      },
+      options: { emailRedirectTo: `${location.origin}/dashboard` },
     })
-
     if (error) alert(error.message)
     else alert('Check your email to confirm!')
     setLoading(false)
@@ -57,35 +53,15 @@ export default function SignUp() {
         <div className="text-center text-gray-500 mb-6">or</div>
 
         <form onSubmit={handleEmailSignUp} className="space-y-6">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full p-4 rounded-xl bg-gray-800 text-white"
-          />
-          <input
-            type="password"
-            placeholder="Password (6+ chars)"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
-            className="w-full p-4 rounded-xl bg-gray-800 text-white"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl text-xl font-bold disabled:opacity-50"
-          >
-            {loading ? 'Creating account...' : 'Sign Up Free'}
+          <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required className="w-full p-4 rounded-xl bg-gray-800 text-white" />
+          <input type="password" placeholder="Password (6+ chars)" value={password} onChange={e => setPassword(e.target.value)} required minLength={6} className="w-full p-4 rounded-xl bg-gray-800 text-white" />
+          <button type="submit" disabled={loading} className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl text-xl font-bold">
+            {loading ? 'Creating...' : 'Sign Up Free'}
           </button>
         </form>
 
         <p className="mt-6 text-center text-gray-400">
-          Already have an account?{' '}
-          <a href="/login" className="text-blue-400 hover:underline">Log in</a>
+          Already have an account? <a href="/login" className="text-blue-400 hover:underline">Log in</a>
         </p>
       </div>
     </div>
