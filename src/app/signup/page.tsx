@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-export default function Login() {
+export default function SignUp() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -13,19 +13,18 @@ export default function Login() {
     e.preventDefault()
     setLoading(true)
 
-    const formData = new FormData()
-    formData.append('email', email)
-    formData.append('password', password)
-
-    const response = await fetch('/auth/signin', {
+    const res = await fetch('/auth/signup', {
       method: 'POST',
-      body: formData,
+      body: JSON.stringify({ email, password }),
+      headers: { 'Content-Type': 'application/json' },
     })
 
-    if (response.ok) {
-      router.push('/dashboard')
+    if (res.ok) {
+      alert('Check your email to confirm your account!')
+      router.push('/login')
     } else {
-      alert('Login failed')
+      const data = await res.json()
+      alert(data.error || 'Something went wrong')
     }
 
     setLoading(false)
@@ -34,41 +33,41 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center">
       <div className="bg-gray-900 p-12 rounded-3xl max-w-md w-full">
-        <h2 className="text-4xl text-white mb-8 text-center">Sign in to Ennovly</h2>
+        <h2 className="text-4xl text-white mb-8 text-center">Create your Ennovly account</h2>
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <input
-            name="email"
-            placeholder="Email"
             type="email"
+            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
             className="w-full p-4 rounded-xl bg-gray-800 text-white"
           />
           <input
-            name="password"
-            placeholder="Password"
             type="password"
+            placeholder="Password (min 6 chars)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            minLength={6}
             className="w-full p-4 rounded-xl bg-gray-800 text-white"
           />
+
           <button
             type="submit"
             disabled={loading}
             className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl text-xl font-bold disabled:opacity-50"
           >
-            {loading ? 'Signing in...' : 'Sign in'}
-          </button>
-        </form>
-        <div className="mt-6 text-center">
-          <a href="/auth/google" className="text-blue-400 hover:underline">Or sign in with Google</a>
-        </div>
-        <p className="mt-4 text-sm text-gray-400 text-center">
-          No account? <a href="/signup" className="text-blue-400">Sign up</a>
-        </p>
-      </div>
-    </div>
+            {loading ? 'Creating account...' : 'Sign Up Free'}
+          button>
+        form>
+
+        <p className="mt-6 text-center text-gray-400">
+          Already have an account?{' '}
+          <a href="/login" className="text-blue-400 hover:underline">Log ina>
+        p>
+      div>
+    div>
   )
 }
